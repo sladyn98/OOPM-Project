@@ -49,10 +49,6 @@ class text_area extends JFrame
          // create_File();
           create_File();
 
-        
-      
-        
-
         //calls create menu
          create_menu();
         
@@ -201,7 +197,7 @@ class text_area extends JFrame
                     tabbedPane.addTab("sladyn",panelNo.get(panelCounter));
                     add(tabbedPane);
                     setVisible(true);
-                    System.out.println("counter is "+textAreaCounter+" "+panelCounter);
+                   // System.out.println("counter is "+textAreaCounter+" "+panelCounter);
 
                     textAreaCounter++;
                     panelCounter++;

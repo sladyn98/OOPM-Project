@@ -11,6 +11,10 @@ import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.UndoManager;
+import javax.swing.undo.*;
 
 class text_area extends JFrame
 {
@@ -28,8 +32,8 @@ class text_area extends JFrame
         JTextArea textArea,textArea1;
         JScrollPane scrollpane,scrollpane1;
         JMenuBar menuBar;
-        JMenu menu;
-        JMenuItem newAction,saveAction,openAction;
+        JMenu menu,menu1;
+        JMenuItem newAction,saveAction,openAction,closeAction,undoAction,redoAction;
         JTabbedPane tabbedPane,tabbedPane1;
          
         
@@ -53,8 +57,6 @@ class text_area extends JFrame
            public void stateChanged(ChangeEvent evt) 
            {
               JTabbedPane tabbedPane = (JTabbedPane)evt.getSource();
-             // int tab = tabbedPane.getSelectedIndex();
-              //System.out.println("The selected tab is"+tab);
            }
 
            });
@@ -68,13 +70,16 @@ class text_area extends JFrame
 
         //calls create menu
          create_menu();
-        
         }
 
         public void create_menu()
         {
                 menuBar = new JMenuBar();
                 menu = new JMenu("FILE");
+                
+                menu1 = new JMenu("Edit");
+
+
                 newAction = new JMenuItem("New");
 
 
@@ -122,7 +127,7 @@ class text_area extends JFrame
                                         if(index==-1)
                                         {
                                          UIManager.put("OptionPane.minimumSize",new Dimension(300,300)); 
-                                         String message = "File type kaun dalega BC.\nTera Gand me akkal hai kya?";
+                                         String message = "Please enter a file type\n";
                                          JOptionPane.showMessageDialog(null,message,"title",JOptionPane.WARNING_MESSAGE);
                                         }
                                         writer.write(textAreaNo.get(tabbedPane.getSelectedIndex()).getText());
@@ -137,6 +142,18 @@ class text_area extends JFrame
                         
                 }
          });
+
+
+                closeAction = new JMenuItem("Close");
+
+                closeAction.addActionListener(new ActionListener()
+                {
+                   public void actionPerformed(ActionEvent e)
+                   {
+                     tabbedPane.removeTabAt(tabbedPane.getSelectedIndex());
+                   }
+                });
+
 
              // implements the open function
 
@@ -153,6 +170,7 @@ class text_area extends JFrame
                       {
                         File file = fileChooser.getSelectedFile();
                         String filename = fileChooser.getSelectedFile().getName();
+                        tabbedPane.setTitleAt(tabbedPane.getSelectedIndex(),filename);
 
 
                        try 
@@ -182,14 +200,60 @@ class text_area extends JFrame
                 });
 
 
+                undoAction = new JMenuItem("Undo");
+                UndoManager manager = new UndoManager();
+                textAreaNo.get(tabbedPane.getSelectedIndex()).getDocument().addUndoableEditListener(manager);
+
+                 undoAction.addActionListener(new ActionListener()
+                 {
+
+                   public void actionPerformed(ActionEvent ev)
+                   {
+                    try
+                    {
+                          manager.undo();
+                    }
+                    catch(CannotUndoException ex)
+                    {
+                      ex.printStackTrace();
+                    }
+
+
+                   }
+                 });
+
+
+                redoAction = new JMenuItem("Redo");
+                 textAreaNo.get(tabbedPane.getSelectedIndex()).getDocument().addUndoableEditListener(manager);
+
+                redoAction.addActionListener(new ActionListener()
+                {
+
+                  public void actionPerformed(ActionEvent ev1)
+                  {
+                    try
+                    {
+                      manager.redo();
+                    }
+                      catch(CannotRedoException rx)
+                      {
+                        rx.printStackTrace();
+                      }
+                  }
+                });
+
                 
         
 
 
                 menuBar.add(menu);
+                menuBar.add(menu1);
                 menu.add(newAction);
                 menu.add(saveAction);
                 menu.add(openAction);
+                menu.add(closeAction);
+                menu1.add(undoAction);
+                menu1.add(redoAction);
                 setJMenuBar(menuBar);
 
 

@@ -9,6 +9,9 @@ import java.io.*;
 import java.io.BufferedReader;
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 class text_area extends JFrame
 {
 
@@ -42,6 +45,20 @@ class text_area extends JFrame
           setLayout(new BorderLayout());
           tabbedPane = new JTabbedPane();
 
+
+
+
+           tabbedPane.addChangeListener(new ChangeListener() {
+
+           public void stateChanged(ChangeEvent evt) 
+           {
+              JTabbedPane tabbedPane = (JTabbedPane)evt.getSource();
+             // int tab = tabbedPane.getSelectedIndex();
+              //System.out.println("The selected tab is"+tab);
+           }
+
+           });
+
     
          
 
@@ -74,7 +91,7 @@ class text_area extends JFrame
                 saveAction = new JMenuItem("Save");  
             
 
-
+           
             //implements the save function 
 
                 saveAction.addActionListener(new ActionListener()
@@ -87,11 +104,11 @@ class text_area extends JFrame
                         int userSelection = fileChooser.showSaveDialog(fileChooser);
                          
                          
-
+                        System.out.println("The selected tab is"+tabbedPane.getSelectedIndex());
                         if(userSelection == JFileChooser.APPROVE_OPTION)
                         {
                                 File file = fileChooser.getSelectedFile();
-
+                                
                                 BufferedWriter  writer = null;
                                 try
 
@@ -99,15 +116,16 @@ class text_area extends JFrame
                                         writer = new BufferedWriter(new FileWriter(file.getAbsolutePath()+""));
                                         
                                         String filename = file.getName();
+                                        tabbedPane.setTitleAt(tabbedPane.getSelectedIndex(),filename);
                                         int index = filename.indexOf(".");
                                         System.out.println(index);
                                         if(index==-1)
                                         {
                                          UIManager.put("OptionPane.minimumSize",new Dimension(300,300)); 
-                                         String message = "File type kaun tera baap dalega kya BC.\nTera Gand me akkal hai kya?";
+                                         String message = "File type kaun dalega BC.\nTera Gand me akkal hai kya?";
                                          JOptionPane.showMessageDialog(null,message,"title",JOptionPane.WARNING_MESSAGE);
                                         }
-                                        writer.write(textArea.getText());
+                                        writer.write(textAreaNo.get(tabbedPane.getSelectedIndex()).getText());
                                         writer.close();
                                 }
 
@@ -147,7 +165,7 @@ class text_area extends JFrame
                                 while((c=br.read())!=-1)
                                         s+=(char)c; 
 
-                         textArea.append(s);
+                         textAreaNo.get(tabbedPane.getSelectedIndex()).append(s);
 
                         
                                 br.close();
@@ -203,6 +221,11 @@ class text_area extends JFrame
                     panelCounter++;
 
                  }
+
+
+
+
+                
 
       
 }

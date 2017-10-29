@@ -276,7 +276,7 @@ class text_area extends JFrame
                     panel.setLayout(new BorderLayout());
                     panelNo.add(panel);
                     panelNo.get(panelCounter).add(new JScrollPane(textAreaNo.get(textAreaCounter)),BorderLayout.CENTER);
-                    tabbedPane.addTab("sladyn",panelNo.get(panelCounter));
+                    tabbedPane.addTab("File",panelNo.get(panelCounter));
                     add(tabbedPane);
                     setVisible(true);
                    // System.out.println("counter is "+textAreaCounter+" "+panelCounter);

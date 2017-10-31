@@ -22,10 +22,12 @@ class text_area extends JFrame
 
     // declares an arraylist of textareas
       public ArrayList<JTextArea> textAreaNo = new ArrayList<JTextArea>();
+      public ArrayList<String> words = new ArrayList<String>();
       public ArrayList<JPanel> panelNo = new ArrayList<JPanel>();
       public int textAreaCounter = 0;
       public int panelCounter = 0;
       public boolean savedStatus = false;
+      public int copyCounter =0;
      // public String[] fontOptions = {"Serif", "Agency FB", "Arial", "Calibri", "Cambrian", "Century Gothic", "Comic Sans MS"};
 
     // JComboBox <String> fontList = new JComboBox<>(fontOptions);
@@ -327,7 +329,53 @@ class text_area extends JFrame
                     {
                      textAreaNo.get(tabbedPane.getSelectedIndex()).requestFocus();
                      textAreaNo.get(tabbedPane.getSelectedIndex()).selectAll();
+                     //String ans = textAreaNo.get(tabbedPane.getSelectedIndex()).getSelectedText();
+                     //textAreaNo.get(tabbedPane.getSelectedIndex()).append(ans);
                      }
+                  });
+
+                  JMenuItem copyAction = new JMenuItem("copy");
+                  copyAction.addActionListener(new ActionListener()
+                  {
+                     public void actionPerformed(ActionEvent ev5)
+                     {
+                       textAreaNo.get(tabbedPane.getSelectedIndex()).requestFocus();
+                       String ans = textAreaNo.get(tabbedPane.getSelectedIndex()).getSelectedText();
+
+                      words.add(0,ans);
+                      copyCounter++;
+
+
+                     }
+                  });
+
+
+
+                  JMenuItem cutAction = new JMenuItem("Cut");
+                  cutAction.addActionListener(new ActionListener()
+                  {
+                     public void actionPerformed(ActionEvent ev6)
+                     {
+                       textAreaNo.get(tabbedPane.getSelectedIndex()).requestFocus();
+                       String ans = textAreaNo.get(tabbedPane.getSelectedIndex()).getSelectedText();
+                       textAreaNo.get(tabbedPane.getSelectedIndex()).replaceSelection("");
+
+                      words.add(0,ans);
+                      copyCounter++;
+
+
+                     }
+                  });
+
+
+                  JMenuItem pasteAction = new JMenuItem("Paste");
+                  pasteAction.addActionListener(new ActionListener()
+                  {
+                    public void actionPerformed(ActionEvent ev6)
+                    {
+                      textAreaNo.get(tabbedPane.getSelectedIndex()).append(words.get(0));
+                    }
+
                   });
 
                
@@ -344,6 +392,9 @@ class text_area extends JFrame
                 menu1.add(undoAction);
                 menu1.add(redoAction);
                 menu1.add(selectAction);
+                menu1.add(copyAction);
+                menu1.add(pasteAction);
+                menu1.add(cutAction);
                 menu2.add(Serif);
                 menu2.add(Agency);
                 menu2.add(courier);
